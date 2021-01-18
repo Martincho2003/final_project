@@ -1,0 +1,28 @@
+<style>
+body{
+    background-color: rgba(236, 253, 1, 0.685);
+    }
+</style>
+
+<script>
+    function delete_cookie(name) {
+      document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    }
+  
+    function logout() {
+      delete_cookie('token');
+      document.location = '/';
+    }
+</script>
+
+<title>Online forum</title>
+<body>
+    <h1>Online forum</h1>
+    {% if cur_user %}
+        <li>{{cur_user.username}}</li>
+        <li><a href="#" onclick="logout()">Logout</a></li>
+    {% else %}
+        <li><a href="/login">Login</a></li>
+        <li><a href="/register">Register</a></li>
+    {% endif %}
+</body>
