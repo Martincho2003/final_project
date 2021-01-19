@@ -1,4 +1,5 @@
 import json
+import hashlib
 from functools import wraps
 from flask import request, Flask, flash, redirect, jsonify
 from flask import render_template
@@ -17,10 +18,40 @@ app.secret_key = "wakbcawiluchawoedhaewu2342bwa"
 
 db = SQLAlchemy(app)
 
+def hash_password(password):
+    return hashlib.sha256(password.encode('utf-8')).hexdigest()
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
+
+    def __init__(self, **kwargs):
+        if 'password' in kwargs:
+            kwargs['password'] = hash_password(kwargs['password'])
+        super(User, self).__init__(**kwargs)
+
+    def __repr__(self):
+        return '<User %r>' % self.username
+
+    def verify_password(self, password):
+        return self.password == hash_password(password)
+
+    def generate_token(self):
+        s = Serializer(app.secret_key, expires_in=600)
+        return s.dumps({'username': self.username})
+
+    @staticmethod
+    def find_by_token(token):
+        if not token:
+            return None
+
+        try:
+            s = Serializer(app.secret_key)
+            payload = s.loads(token)
+            return User.query.filter_by(username=payload.get('username')).first()
+        except SignatureExpired:
+            return None
 
 db.create_all()
 def verify_token(token):
@@ -52,10 +83,6 @@ def stop_logged_users(func):
             return redirect('/')
         return func(*args, **kwargs)
     return wrapper
-
-def generate_token(self):
-        s = Serializer(expires_in=600)
-        return s.dumps({'username': self.username})
 
 @app.route("/")
 def hello():
