@@ -4,6 +4,7 @@ body{
     }
 </style>
 
+{% block js %}
 <script>
     function delete_cookie(name) {
       document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -14,15 +15,27 @@ body{
       document.location = '/';
     }
 </script>
+{% endblock %}
 
 <title>Online forum</title>
+<div class="alert_message" align="center">
+    {% block content %}
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <p>{{ message }}</p>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+</div>
 <body>
     <h1>Online forum</h1>
-    {% if cur_user %}
-        <li>{{cur_user.username}}</li>
-        <li><a href="#" onclick="logout()">Logout</a></li>
+    {% if current_user %}
+        <li>{{current_user.username}}</li>
+        <li><a href="/" onclick="logout()">Logout</a></li>
     {% else %}
         <li><a href="/login">Login</a></li>
         <li><a href="/register">Register</a></li>
     {% endif %}
 </body>
+{% endblock %}

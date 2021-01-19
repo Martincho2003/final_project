@@ -14,6 +14,7 @@ from itsdangerous import (
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/dev.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.secret_key = "wakbcawiluchawoedhaewu2342bwa"
 
 db = SQLAlchemy(app)
@@ -86,7 +87,9 @@ def stop_logged_users(func):
 
 @app.route("/")
 def hello():
-    return render_template("base.html")
+    token = request.cookies.get('token')
+    current_user = User.find_by_token(token)
+    return render_template("base.html", current_user=current_user)
 
 @app.route('/login', methods=['GET', 'POST'])
 @stop_logged_users
@@ -121,7 +124,7 @@ def register():
         db.session.commit()
         return redirect('/')
     except Exception as e:
-        flash('Error: {}'.format(e))
+        flash('Error: Username is already used!')
         return redirect(request.url)
 
 
