@@ -1,7 +1,24 @@
 <style>
-body{
-    background-color: rgba(236, 253, 1, 0.685);
-    }
+  body {
+    background-color: rgb(255, 255, 255);
+    font-family: 'Courier New';
+    text-align: center;
+  }
+
+  .button {
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    background-color: rgb(122, 122, 122);
+    display: inline-block;
+    font-size: 15px;
+    margin: 4px 2px;
+    cursor: pointer;
+    font-family: 'Courier New';
+  }
+  
 </style>
 
 {% block js %}
@@ -13,7 +30,7 @@ body{
 
     var request = new XMLHttpRequest();
     request.open("POST", "/login", true);
-    request.onload = function() {
+    request.onload = function () {
       var token = JSON.parse(request.responseText).token;
       if (token != null) {
         document.cookie = 'token=' + token + ';';
@@ -34,17 +51,17 @@ body{
 {% endblock %}
 
 {% block content %}
-<title >Login</title>
+<title>Login</title>
 <div align='Center'>
-    <form>
-        <h1>Login</h1>
-        <label name="username">Username:</label>
-        <input type="text" name="username" id="username"/>
-        <br><br>
-        <label name="password">Password:</label>
-        <input type="password" name="password" id="password"/><br>
-        <br>
-        <button type="button" onclick="login()">Login</button>
-    </form>
+  <form>
+    <h1>Login</h1>
+    <label name="username">Username:</label>
+    <input type="text" name="username" id="username" />
+    <br><br>
+    <label name="password">Password:</label>
+    <input type="password" name="password" id="password" /><br>
+    <br>
+    <button class="button" onclick="login()">Login</button>
+  </form>
 </div>
-  {% endblock %}
+{% endblock %}

@@ -1,41 +1,49 @@
 <style>
-body{
-    background-color: rgba(236, 253, 1, 0.685);
-    }
+  body {
+    background-color: rgb(255, 255, 255);
+    font-family: 'Courier New';
+    text-align: center;
+  }
+
+  .div {
+    border: 1px outset black;
+    text-align: center;
+  }
 </style>
 
 {% block js %}
 <script>
-    function delete_cookie(name) {
-      document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    }
-  
-    function logout() {
-      delete_cookie('token');
-      document.location = '/';
-    }
+  function delete_cookie(name) {
+    document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  }
+
+  function logout() {
+    delete_cookie('token');
+    document.location = '/';
+  }
 </script>
 {% endblock %}
 
 <title>Online forum</title>
 <div class="alert_message" align="center">
-    {% block content %}
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        {% for message in messages %}
-          <p>{{ message }}</p>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
+  {% block content %}
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  {% for message in messages %}
+  <p>{{ message }}</p>
+  {% endfor %}
+  {% endif %}
+  {% endwith %}
 </div>
+
 <body>
-    <h1>Online forum</h1>
-    {% if current_user %}
-        <li>{{current_user.username}}</li>
-        <li><a href="/" onclick="logout()">Logout</a></li>
-    {% else %}
-        <li><a href="/login">Login</a></li>
-        <li><a href="/register">Register</a></li>
-    {% endif %}
+  <h1>Online forum</h1>
+  {% if current_user %}
+  <div style="border: 1px solid black; margin-right: 300px;margin-left:  300px;"><li>{{current_user.username}}</li></div>
+  <li><a href="/" onclick="logout()">Logout</a></li>
+  {% else %}
+  <li><a href="/login">Login</a></li>
+  <li><a href="/register">Register</a></li>
+  {% endif %}
 </body>
 {% endblock %}
