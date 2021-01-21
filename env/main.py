@@ -1,3 +1,4 @@
+from enum import unique
 import json
 import hashlib
 from functools import wraps
@@ -10,6 +11,7 @@ from itsdangerous import (
         BadSignature,
         SignatureExpired
     )
+from sqlalchemy.orm import backref
 
 
 app = Flask(__name__)
@@ -26,6 +28,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
+    #messages = db.relationship('message', backref='user')
 
     def __init__(self, **kwargs):
         if 'password' in kwargs:
@@ -53,6 +56,24 @@ class User(db.Model):
             return User.query.filter_by(username=payload.get('username')).first()
         except SignatureExpired:
             return None
+
+#class Subject:
+#    id = db.Column(db.Integer, primary_key=True)
+#    name = db.Column(db.String(80), unique=True, nullable=False)
+#    description = db.Column(db.String(500), unique=True)
+#    posts = db.relationship('Post', backref='subject')
+
+#class Post:
+#    id = db.Column(db.Integer, primary_key=True)
+#    messages = db.relationship('message', backref='post')
+#    subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'))
+
+#class Message:
+#    id = db.Column(db.Integer, primary_key=True)
+#    content = db.Column(db.String(1000), nullable=False)
+#    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+#    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
 
 db.create_all()
 def verify_token(token):
