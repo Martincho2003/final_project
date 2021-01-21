@@ -9,6 +9,27 @@
     border: 1px outset black;
     text-align: center;
   }
+
+  ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
 </style>
 
 {% block js %}
@@ -37,13 +58,19 @@
 </div>
 
 <body>
-  <h1>Online forum</h1>
+  <h1 style="margin-top:25px">Online forum</h1>
   {% if current_user %}
-  <div style="border: 1px solid black; margin-right: 300px;margin-left:  300px;"><li>{{current_user.username}}</li></div>
-  <li><a href="/" onclick="logout()">Logout</a></li>
+  <h3>{{current_user.username}}</h3>
+  <ul>
+    <li><a href="/" onclick="logout()">Logout</a></li>
+  </ul>
   {% else %}
-  <li><a href="/login">Login</a></li>
-  <li><a href="/register">Register</a></li>
+  <ul>
+    <li><a href="/login">Login</a></li>
+    <li><a href="/register">Register</a></li>
+  </ul>
   {% endif %}
+
+
 </body>
 {% endblock %}

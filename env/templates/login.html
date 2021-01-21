@@ -5,20 +5,6 @@
     text-align: center;
   }
 
-  .button {
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    background-color: rgb(122, 122, 122);
-    display: inline-block;
-    font-size: 15px;
-    margin: 4px 2px;
-    cursor: pointer;
-    font-family: 'Courier New';
-  }
-  
 </style>
 
 {% block js %}
@@ -54,14 +40,14 @@
 <title>Login</title>
 <div align='Center'>
   <form>
-    <h1>Login</h1>
+    <h1 style="margin-top:25px">Login</h1>
     <label name="username">Username:</label>
     <input type="text" name="username" id="username" />
     <br><br>
     <label name="password">Password:</label>
     <input type="password" name="password" id="password" /><br>
     <br>
-    <button class="button" onclick="login()">Login</button>
+    <button type="button" onclick="login()">Submit</button>
   </form>
 </div>
 {% endblock %}
