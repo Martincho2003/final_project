@@ -164,10 +164,10 @@ def register():
     except Exception as e:
         flash('Error: Username is already used!')
         return redirect(request.url)
-
 """
 TODO:
 @app.route('/my_subjects'), methods=['GET', 'POST']
+def subject()
 
 @app.route('/my_posts'), methods=['GET', 'POST']
 """

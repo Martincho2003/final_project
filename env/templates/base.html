@@ -1,37 +1,5 @@
-<style>
-  body {
-    background-color: rgb(255, 255, 255);
-    font-family: 'Courier New';
-    text-align: center;
-  }
-
-  .div {
-    border: 1px outset black;
-    text-align: center;
-  }
-
-  ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #333;
-}
-
-li {
-  float: left;
-}
-
-li a {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-</style>
-
+<!DOCTYPE html>
+<html>
 {% block js %}
 <script>
   function delete_cookie(name) {
@@ -45,17 +13,20 @@ li a {
 </script>
 {% endblock %}
 
-<title>Online forum</title>
-<div class="alert_message" align="center">
-  {% block content %}
-  {% with messages = get_flashed_messages() %}
-  {% if messages %}
-  {% for message in messages %}
-  <p>{{ message }}</p>
-  {% endfor %}
-  {% endif %}
-  {% endwith %}
-</div>
+<head>
+  <title>Online forum</title>
+  <link href="{{ url_for('static', filename='style.css')}}"rel="stylesheet">
+  <div class="alert_message" align="center">
+    {% block content %}
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+  </div>
+</head>
 
 <body>
   <h1 style="margin-top:25px">Online forum</h1>
@@ -71,7 +42,7 @@ li a {
     <li><a href="/register">Register</a></li>
   </ul>
   {% endif %}
-
-
 </body>
 {% endblock %}
+
+</html>

@@ -1,28 +1,39 @@
-<title>Online forum</title>
-<div class="alert_message" align="center">
-  {% block content %}
-  {% with messages = get_flashed_messages() %}
-  {% if messages %}
-  {% for message in messages %}
-  <p>{{ message }}</p>
-  {% endfor %}
-  {% endif %}
-  {% endwith %}
-</div>
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Online forum</title>
+  <link href="{{ url_for('static', filename='style.css')}}" rel="stylesheet">
+  <div class="alert_message" align="center">
+    {% block content %}
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+  </div>
+</head>
 
 <body>
-<div align='Center'>
-  <h1 style="margin-top:25px">Add new subject</h1>
-  <br />
-  <form method="POST" url="/add_subject" enctype=multipart/form-data>
-    <label name="name">Name:</label>
-    <input type="text" name="name" autofocus/><br>
-    <label name="description">Description:</label>
-    <input type="text" name="description"><br>
-    <!--TODO: make the input for description bigger!-->
-    <br><br>
-    <button type="submit">Add</button>
-  </form>
-</div>
+  <div align='Center'>
+    <h1 style="margin-top:25px">Add new subject</h1>
+    <br />
+    <form method="POST" url="/add_subject" enctype=multipart/form-data>
+      <label name="name">Name:</label>
+      <input type="text" name="name" autofocus />
+      <br>
+      <br>
+      <label name="description">Description:</label>
+      <textarea name="message" rows="10" cols="30"></textarea>
+      <!--TODO: make the input for description bigger!-->
+      <br>
+      <br>
+      <button type="submit">Add</button>
+    </form>
+  </div>
 </body>
 {% endblock %}
+
+</html>

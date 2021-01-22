@@ -1,39 +1,38 @@
-<style>
-  body {
-    background-color: rgb(255, 255, 255);
-    font-family: 'Courier New';
-    text-align: center;
-  }
+<!DOCTYPE html>
+<html>
 
-  .alert_messages {
-    border-color: orange;
-    background-color: palegreen;
-    background-size: 5px;
-    text-align: center;
-    width: 100%;
-  }
-</style>
-<title>Register</title>
-<div class="alert_message" align="center">
-  {% block content %}
-  {% with messages = get_flashed_messages() %}
-  {% if messages %}
-  {% for message in messages %}
-  <p>{{ message }}</p>
-  {% endfor %}
-  {% endif %}
-  {% endwith %}
-</div>
-<div align='Center'>
-  <h1 style="margin-top:25px">Register</h1>
-  <br />
-  <form method="POST" url="/register" enctype=multipart/form-data>
-    <label name="username">Username:</label>
-    <input type="text" name="username" autofocus/><br>
-    <label name="password">Password:</label>
-    <input type="password" name="password"><br>
-    <br><br>
-    <button type="submit">Register</button>
-  </form>
-</div>
+<head>
+  <title>Register</title>
+  <link href="{{ url_for('static', filename='style.css')}}"rel="stylesheet">
+  <div class="alert_message" align="center">
+    {% block content %}
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+  </div>
+</head>
+
+<body>
+  <div align='Center'>
+    <h1 style="margin-top:25px">Register</h1>
+    <form method="POST" url="/register" enctype=multipart/form-data>
+      <label name="username">Username:</label>
+      <input type="text" name="username" autofocus />
+      <br>
+      <br>
+      <label name="password">Password:</label>
+      <input type="password" name="password">
+      <br>
+      <br>
+      <button type="submit">Register</button>
+    </form>
+  </div>
+</body>
+
 {% endblock %}
+
+</html>

@@ -1,11 +1,5 @@
-<style>
-  body {
-    background-color: rgb(255, 255, 255);
-    font-family: 'Courier New';
-    text-align: center;
-  }
-
-</style>
+<!DOCTYPE html>
+<html>
 
 {% block js %}
 <script>
@@ -37,17 +31,30 @@
 {% endblock %}
 
 {% block content %}
-<title>Login</title>
-<div align='Center'>
-  <form>
-    <h1 style="margin-top:25px">Login</h1>
-    <label name="username">Username:</label>
-    <input type="text" name="username" id="username" autofocus/>
-    <br><br>
-    <label name="password">Password:</label>
-    <input type="password" name="password" id="password"/><br>
-    <br>
-    <button type="button" onclick="login()">Submit</button>
-  </form>
-</div>
+
+<head>
+  <title>Login</title>
+  <link href="{{ url_for('static', filename='style.css')}}" rel="stylesheet">
+</head>
+
+<body>
+  <div align='Center'>
+    <form>
+      <h1 style="margin-top:25px">Login</h1>
+      <label name="username">Username:</label>
+      <input type="text" name="username" id="username" autofocus />
+      <br>
+      <br>
+      <label name="password">Password:</label>
+      <input type="password" name="password" id="password" />
+      <br>
+      <br>
+      <button type="button" onclick="login()">Submit</button>
+    </form>
+  </div>
+
+</body>
+
 {% endblock %}
+
+</html>
