@@ -2,6 +2,7 @@ from enum import unique
 import json
 import hashlib
 from functools import wraps
+from operator import pos
 from flask import request, Flask, flash, redirect, jsonify
 from flask import render_template
 from datetime import datetime
@@ -172,6 +173,16 @@ def subject()
 @app.route('/my_posts'), methods=['GET', 'POST']
 """
 
+@app.route('/my_subjects', methods=['GET'])
+@require_login
+def subjects():
+    token = request.cookies.get('token')
+    current_user = User.find_by_token(token)
+    all = Subject.query.filter_by(user_id = current_user.id)
+    subjects = list(all)
+    return render_template('my_subjects.html', subjects=subjects)
+
+
 @app.route('/add_subject', methods=['GET', 'POST'])
 @require_login
 def add_subject():
@@ -181,7 +192,7 @@ def add_subject():
         name = request.form.get("name")
         token = request.cookies.get('token')
         current_user = User.find_by_token(token)
-        description = request.form.get('description')
+        description = request.form.get('message')
         user_id = current_user.id
 
     try:
@@ -192,7 +203,7 @@ def add_subject():
                 )
         db.session.add(subject)
         db.session.commit()
-        return redirect('/')
+        return redirect('/my_subjects')
     except Exception as e:
         flash('Error: {}'.format(e))
         return redirect(request.url)

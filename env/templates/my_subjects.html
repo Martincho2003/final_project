@@ -1,0 +1,27 @@
+<head>
+    <title>Online forum</title>
+    <link href="{{ url_for('static', filename='style.css')}}"rel="stylesheet">
+    <div class="alert_message" align="center">
+      {% block content %}
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      {% for message in messages %}
+      <p>{{ message }}</p>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+    </div>
+  </head>
+
+<body>
+    <h1 style="margin-top:25px">My subjects</h1>
+    <ul>
+        <li><a href='/add_subject'>Add new subject</a></li>
+    </ul>
+    <div>
+        {% for subject in subjects %}
+        <div>{{subject.name}}</div>
+        {% endfor %}
+    </div>
+</body>
+{% endblock %}
