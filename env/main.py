@@ -167,8 +167,6 @@ def register():
         return redirect(request.url)
 """
 TODO:
-@app.route('/my_subjects'), methods=['GET', 'POST']
-def subject()
 
 @app.route('/my_posts'), methods=['GET', 'POST']
 """
@@ -182,6 +180,11 @@ def subjects():
     subjects = list(all)
     return render_template('my_subjects.html', subjects=subjects)
 
+@app.route('/my_subjects/<subject_id>', methods=['GET'])
+@require_login
+def subject(subject_id):
+    subject_id = 1
+    return render_template('subject.html', subject_id=subject_id)
 
 @app.route('/add_subject', methods=['GET', 'POST'])
 @require_login
@@ -208,11 +211,11 @@ def add_subject():
         flash('Error: {}'.format(e))
         return redirect(request.url)
 
-@app.route('/edit_subject/<subject_id>', methods=['GET', 'POST'])
+@app.route('/my_subjects/<subject_id>/edit_subject', methods=['GET', 'POST'])
 @require_login
 def edit_subject(subject_id):
     if request.method == 'GET':
-        return render_template('edit_subject.html')
+        return render_template('edit_subject.html', subject_id=subject_id)
     else:
         name = request.form.get("name")
         description = request.form.get('description')
@@ -227,7 +230,7 @@ def edit_subject(subject_id):
         flash('Error: {}'.format(e))
         return redirect(request.url)
 
-@app.route('/delete_subject/<subject_id>', methods=['POST'])
+@app.route('/my_subjects/<subject_id>/delete_subject', methods=['POST'])
 @require_login
 def delete_subject(subject_id):
     try:
@@ -239,7 +242,7 @@ def delete_subject(subject_id):
         flash('Error: {}'.format(e))
         return redirect(request.url)
 
-"""@app.route('/my_posts/add_post/<subject_id>', methods=['GET', 'POST'])
+@app.route('/my_subjects/<subject_id>/add_post', methods=['GET', 'POST'])
 @require_login
 def add_post(subject_id):
     if request.method == 'GET':
@@ -262,7 +265,7 @@ def add_post(subject_id):
         return redirect('/')
     except Exception as e:
         flash('Error: {}'.format(e))
-        return redirect(request.url)"""
+        return redirect(request.url)
 
 if __name__ == "__main__":
 	app.run()

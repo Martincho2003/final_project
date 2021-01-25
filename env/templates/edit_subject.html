@@ -1,0 +1,16 @@
+<body>
+    <div align='Center'>
+        <h1 style="margin-top:25px">Edit subject "{{subject.name}}"</h1>
+        <form method="POST" url="/add_subject" enctype=multipart/form-data>
+            <label name="name">New name:</label>
+            <input type="text" name="name" autofocus />
+            <br>
+            <br>
+            <label name="description">New description:</label>
+            <textarea name="message" rows="10" cols="30"></textarea>
+            <br>
+            <br>
+            <button type="submit">Save changes</button>
+          </form>
+      </div>
+</body>

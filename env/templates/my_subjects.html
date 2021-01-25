@@ -20,7 +20,7 @@
     </ul>
     <div>
         {% for subject in subjects %}
-        <div>{{subject.name}}</div>
+        <div><a href='/my_subjects/{{subject.id}}'>{{subject.name}}</a></div>
         {% endfor %}
     </div>
 </body>
