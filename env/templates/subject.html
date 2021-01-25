@@ -1,8 +1,15 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Subject</title>
+    <link href="{{ url_for('static', filename='style.css')}}"rel="stylesheet">
+</head>
+
 <body>
     <h1 style="margin-top:25px">My subject</h1>
     <ul>
-        <li><a href='/my_subjects/{{subject.id}}/edit_subject'>Edit subject</a></li>
-        <li><a href='/my_subjects/{{subject.id}}/delete_subject'>Delete subject</a></li>
-        <li><a href='/my_subjects/{{subject.id}}/add_post'>Add new post</a></li>
+       <li><a href='/my_subjects/{{subject.id}}/edit_subject'>Edit subject</a></li>
     </ul>
 </body>
+</html>

@@ -192,7 +192,7 @@ def add_subject():
     if request.method == 'GET':
         return render_template('add_subject.html')
     else:
-        name = request.form.get("name")
+        name = request.form.get('name')
         token = request.cookies.get('token')
         current_user = User.find_by_token(token)
         description = request.form.get('message')
@@ -205,6 +205,7 @@ def add_subject():
                 user_id = user_id
                 )
         db.session.add(subject)
+
         db.session.commit()
         return redirect('/my_subjects')
     except Exception as e:
@@ -217,15 +218,16 @@ def edit_subject(subject_id):
     if request.method == 'GET':
         return render_template('edit_subject.html', subject_id=subject_id)
     else:
-        name = request.form.get("name")
+        name = request.form.get('name')
         description = request.form.get('description')
 
     try:
         subject = Subject.query.get(subject_id)
         subject.name = name
         subject.description = description
+        subjects.update().where(subject_id==subject_id).value(name=name,description=description)
         db.session.commit()
-        return redirect('/')
+        return redirect('/my_subjects')
     except Exception as e:
         flash('Error: {}'.format(e))
         return redirect(request.url)

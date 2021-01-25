@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 {% block js %}
 <script>
   function delete_cookie(name) {
@@ -15,7 +16,7 @@
 
 <head>
   <title>Online forum</title>
-  <link href="{{ url_for('static', filename='style.css')}}"rel="stylesheet">
+  <link href="{{ url_for('static', filename='style.css')}}" rel="stylesheet">
   <div class="alert_message" align="center">
     {% block content %}
     {% with messages = get_flashed_messages() %}
