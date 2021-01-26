@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+<body>
+    <!DOCTYPE html>
 <html>
 
 <head>
@@ -17,14 +18,14 @@
 </head>
 
 <body>
-  <h1 style="margin-top:25px">My subjects</h1>
+  <h1 style="margin-top:25px">My posts</h1>
   <ul>
-    <li><a href="/my_subjects/add_subject">Add new subject</a></li>
+    <li><a href="/my_subjects/{{subject_id}}/my_posts/add_post">Add new post</a></li>
   </ul>
   <div>
-    {% for subject in subjects %}
+    {% for post in posts %}
     <div "margin: auto">
-      <a href="/my_subjects/{{subject.id}}"">{{subject.name}}</a>
+      <a href='/my_subjects/{{subject_id}}/my_posts/{{post.id}}'>{{post.name}}</a>
     </div>
     {% endfor %}
   </div>
@@ -32,3 +33,4 @@
 {% endblock %}
 
 </html>
+</body>

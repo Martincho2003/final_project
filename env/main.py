@@ -73,6 +73,10 @@ class Subject(db.Model):
     posts = db.relationship('Post',
             foreign_keys='Post.subject_id',
             backref='Subject')
+    messages = db.relationship('Message',
+            foreign_keys='Message.subject_id',
+            backref='Subject'
+            )
     user_id = db.Column(db.Integer, db.ForeignKey(User.id))
 
 class Post(db.Model):
@@ -90,6 +94,7 @@ class Message(db.Model):
     content = db.Column(db.String(1000), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey(Post.id))
     user_id = db.Column(db.Integer, db.ForeignKey(User.id))
+    subject_id = db.Column(db.Integer, db.ForeignKey(Subject.id))
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
 
@@ -165,11 +170,6 @@ def register():
     except Exception as e:
         flash('Error: Username is already used!')
         return redirect(request.url)
-"""
-TODO:
-
-@app.route('/my_posts'), methods=['GET', 'POST']
-"""
 
 @app.route('/my_subjects', methods=['GET'])
 @require_login
@@ -183,10 +183,10 @@ def subjects():
 @app.route('/my_subjects/<subject_id>', methods=['GET'])
 @require_login
 def subject(subject_id):
-    subject_id = 1
-    return render_template('subject.html', subject_id=subject_id)
+    subject= Subject.query.get(subject_id)
+    return render_template('subject.html', subject_id=subject_id, subject=subject)
 
-@app.route('/add_subject', methods=['GET', 'POST'])
+@app.route('/my_subjects/add_subject', methods=['GET', 'POST'])
 @require_login
 def add_subject():
     if request.method == 'GET':
@@ -216,55 +216,114 @@ def add_subject():
 @require_login
 def edit_subject(subject_id):
     if request.method == 'GET':
-        return render_template('edit_subject.html', subject_id=subject_id)
+        subject= Subject.query.get(subject_id)
+        return render_template('edit_subject.html', subject_id=subject_id, subject=subject)
     else:
         name = request.form.get('name')
-        description = request.form.get('description')
+        description = request.form.get('message')
 
     try:
         subject = Subject.query.get(subject_id)
         subject.name = name
         subject.description = description
-        subjects.update().where(subject_id==subject_id).value(name=name,description=description)
+        db.session.commit()
+        return redirect('/my_subjects/<subject_id>')
+    except Exception as e:
+        flash('Error: {}'.format(e))
+        return redirect(request.url)
+
+@app.route('/my_subjects/<subject_id>/delete_subject', methods=['GET'])
+@require_login
+def delete_subject(subject_id):
+    try:
+        subject = Subject.query.get(subject_id)
+        posts = Post.query.filter_by(subject_id=subject_id)
+        for post in posts:
+            db.session.delete(post)
+        messages = Message.query.get(subject_id=subject_id)
+        for message in messages:
+            db.session.delete(message)
+        db.session.delete(subject)
         db.session.commit()
         return redirect('/my_subjects')
     except Exception as e:
         flash('Error: {}'.format(e))
         return redirect(request.url)
 
-@app.route('/my_subjects/<subject_id>/delete_subject', methods=['POST'])
+@app.route('/my_subjects/<subject_id>/my_posts', methods=['GET'])
 @require_login
-def delete_subject(subject_id):
-    try:
-        subject = Subject.query.get(subject_id)
-        db.session.delete(subject)
-        db.session.commit()
-        return redirect('/')
-    except Exception as e:
-        flash('Error: {}'.format(e))
-        return redirect(request.url)
+def posts(subject_id):
+    subject = Subject.query.get(subject_id)
+    token = request.cookies.get('token')
+    current_user = User.find_by_token(token)
+    all = Post.query.filter_by(subject_id=subject_id, user_id = current_user.id)
+    posts = list(all)
+    return render_template('my_posts.html', subject_id=subject_id, subject=subject, posts=posts)
 
-@app.route('/my_subjects/<subject_id>/add_post', methods=['GET', 'POST'])
+@app.route('/my_subjects/<subject_id>/my_posts/add_post', methods=['GET', 'POST'])
 @require_login
 def add_post(subject_id):
     if request.method == 'GET':
-        return render_template('add_post.html')
+        return render_template('add_post.html', subject_id=subject_id)
     else:
         name = request.form.get("name")
-        subject_id = Subject.query.filter_by(id=subject_id)
+        subject_id = subject_id
         token = request.cookies.get('token')
         current_user = User.find_by_token(token)
         user_id = current_user.id
 
     try:
-        subject = Subject(
+        post = Post(
                 name = name,
                 subject_id = subject_id,
                 user_id = user_id
                 )
-        db.session.add(subject)
+        db.session.add(post)
         db.session.commit()
-        return redirect('/')
+        return redirect('/my_subjects/<subject_id>/my_posts')
+    except Exception as e:
+        flash('Error: {}'.format(e))
+        return redirect(request.url)
+
+@app.route('/my_subjects/<subject_id>/my_posts/<post_id>', methods=['GET'])
+@require_login
+def post(subject_id, post_id):
+    subject = Subject.query.get(subject_id)
+    post = Post.query.get(post_id)
+    return render_template("post.html", subject_id=subject_id, post_id=post_id,
+    subject=subject, post=post)
+
+@app.route('/my_subjects/<subject_id>/my_posts/<post_id>/edit_post', methods=['GET', 'POST'])
+@require_login
+def edit_post(subject_id, post_id):
+    if request.method == 'GET':
+        subject = Subject.query.get(subject_id)
+        post = Post.query.get(post_id)
+        return render_template('edit_post.html', subject_id=subject_id, post_id=post_id,
+        subject=subject, post=post)
+    else:
+        name = request.form.get('name')
+
+    try:
+        post = Post.query.get(post_id)
+        post.name = name
+        db.session.commit()
+        return redirect('/my_subjects/<subject_id>/my_posts/<post_id>')
+    except Exception as e:
+        flash('Error: {}'.format(e))
+        return redirect(request.url)
+
+@app.route('/my_subjects/<subject_id>/my_posts/<post_id>/delete_post', methods=['GET'])
+@require_login
+def delete_post(subject_id, post_id):
+    try:
+        post = Post.query.get(post_id)
+        messages = Message.query.get(post_id=post_id)
+        for message in messages:
+            db.session.delete(message)    
+        db.session.delete(post)
+        db.session.commit()
+        return redirect('/my_subjects/<subject_id>/my_posts')
     except Exception as e:
         flash('Error: {}'.format(e))
         return redirect(request.url)

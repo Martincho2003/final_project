@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>My subject</title>
+  <title>Edit subject</title>
   <link href="{{ url_for('static', filename='style.css')}}" rel="stylesheet">
   <div class="alert_message" align="center">
     {% block content %}
@@ -17,16 +17,16 @@
 </head>
 
 <body>
-  <h1 style="margin-top:25px">My subjects</h1>
-  <ul>
-    <li><a href="/my_subjects/add_subject">Add new subject</a></li>
-  </ul>
-  <div>
-    {% for subject in subjects %}
-    <div "margin: auto">
-      <a href="/my_subjects/{{subject.id}}"">{{subject.name}}</a>
-    </div>
-    {% endfor %}
+  <div align='Center'>
+    <h1 style="margin-top:25px">Edit post {{post.name}}</h1>
+
+    <form method="POST" enctype=multipart/form-data>
+      <label name="name">New name:</label>
+      <input type="text" name="name" autofocus />
+      <br>
+      <br>
+      <button type="submit">Edit</button>
+    </form>
   </div>
 </body>
 {% endblock %}

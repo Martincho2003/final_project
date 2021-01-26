@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Post</title>
+    <link href="{{ url_for('static', filename='style.css')}}"rel="stylesheet">
+</head>
+
+<body>
+    <h1 style="margin-top:25px">My post</h1>
+    <h3>{{post.name}}</h3>
+    <ul>
+       <li><a href='/my_subjects/{{subject_id}}/my_posts/{{post.id}}/edit_post'>Edit post</a></li>
+       <li><a href='/my_subjects/{{subject_id}}/my_posts/{{post.id}}/delete_post'>Delete post</a></li>
+    </ul>
+</body>
+</html>

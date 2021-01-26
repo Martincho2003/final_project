@@ -8,8 +8,11 @@
 
 <body>
     <h1 style="margin-top:25px">My subject</h1>
+    <h3>{{subject.name}}</h3>
     <ul>
-       <li><a href='/my_subjects/{{subject.id}}/edit_subject'>Edit subject</a></li>
+       <li><a href='/my_subjects/{{subject_id}}/edit_subject'>Edit subject</a></li>
+       <li><a href='/my_subjects/{{subject_id}}/delete_subject'>Delete subject</a></li>
+       <li><a href='/my_subjects/{{subject_id}}/my_posts'>My posts</a></li>
     </ul>
 </body>
 </html>
