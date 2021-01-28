@@ -1,5 +1,21 @@
 <!DOCTYPE html>
 <html>
+<style>
+  a.ex:link,
+  a.ex:visited {
+    background-color: #fcfcfc;
+    color: rgb(0, 0, 0);
+    padding: 14px 200px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  a.ex:hover,
+  a.ex:active {
+    background-color: rgb(100, 100, 100);
+  }
+</style>
 
 {% block js %}
 <script>
@@ -43,9 +59,10 @@
     <li><a href="/register">Register</a></li>
   </ul>
   {% endif %}
+  <br>
   {% for subject in subjects %}
   <div>
-      <a href='/{{subject.id}}'>{{subject.name}}</a>
+    <a class="ex" href='/{{subject.id}}'>{{subject.name}}<br><p>{{subject.timestamp}}</p></a>
   </div>
   {% endfor %}
 </body>

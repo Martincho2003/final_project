@@ -35,3 +35,16 @@ li a {
     text-align: center;
     width: 100%;
 }
+
+.div a:link, .div a:visited {
+  background-color: #f44336;
+  color: white;
+  padding: 14px 25px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.div a:hover, .div a:active {
+  background-color: red;
+}

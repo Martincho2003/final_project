@@ -188,7 +188,7 @@ def my_subjects():
 
 @app.route('/my_subjects/<subject_id>', methods=['GET'])
 @require_login
-def my_posts(subject_id):
+def my_subject(subject_id):
     subject = Subject.query.get(subject_id)
     token = request.cookies.get('token')
     current_user = User.find_by_token(token)
@@ -197,7 +197,7 @@ def my_posts(subject_id):
     return render_template('subject.html', subject_id=subject_id, subject=subject, posts=posts, current_user=current_user)
 
 @app.route('/<subject_id>', methods = ['GET'])
-def subject_2(subject_id):
+def subject(subject_id):
     subject = Subject.query.get(subject_id)
     token = request.cookies.get('token')
     current_user = User.find_by_token(token)

@@ -1,8 +1,23 @@
 <!DOCTYPE html>
 <html>
-
+<style>
+        a.ex:link,
+        a.ex:visited {
+          background-color: #fcfcfc;
+          color: rgb(0, 0, 0);
+          padding: 14px 200px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+        }
+      
+        a.ex:hover,
+        a.ex:active {
+          background-color: rgb(100, 100, 100);
+        }
+</style>
 <head>
-    <title>Subject</title>
+    <title>FLASK FORUM</title>
     <link href="{{ url_for('static', filename='style.css')}}"rel="stylesheet">
 </head>
 
@@ -32,7 +47,7 @@
     </ul>
     {% for post in posts %}
         <div>
-            <a href='/{{subject_id}}/{{post.id}}'>{{post.name}}</a>
+            <a href='/{{subject_id}}/{{post.id}}'>{{post.name}}<br><p>{{post.timestamp}}</p></a>
         </div>
     {% endfor %}
     {% endif %}
