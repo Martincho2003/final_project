@@ -9,7 +9,10 @@
 <body>
     {% if current_user %}
     <h1 style="margin-top:25px">My subject</h1>
-    <h3>{{subject.name}}</h3>
+    {% if current_user %}
+        <h3>{{current_user.username}}</h3>
+    {% endif %}
+    <h4>{{subject.name}}</h4>
     <ul>
        <li><a href='/my_subjects/{{subject_id}}/edit_subject'>Edit subject</a></li>
        <li><a href='/my_subjects/{{subject_id}}/delete_subject'>Delete subject</a></li>

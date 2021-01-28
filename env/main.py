@@ -180,7 +180,7 @@ def subjects():
     current_user = User.find_by_token(token)
     all = Subject.query.filter_by(user_id = current_user.id)
     subjects = list(all)
-    return render_template('my_subjects.html', subjects=subjects)
+    return render_template('my_subjects.html', subjects=subjects, current_user=current_user)
 
 @app.route('/my_subjects/<subject_id>', methods=['GET'])
 @require_login
@@ -190,7 +190,7 @@ def subject(subject_id):
     current_user = User.find_by_token(token)
     all = Post.query.filter_by(subject_id = subject_id, user_id=current_user.id)
     posts = list(all)
-    return render_template('subject.html', subject_id=subject_id, subject=subject, posts=posts)
+    return render_template('subject.html', subject_id=subject_id, subject=subject, posts=posts, current_user=current_user)
 
 @app.route('/<subject_id>', methods=['GET'])
 def subject2(subject_id):
@@ -204,8 +204,10 @@ def subject2(subject_id):
 @app.route('/my_subjects/add_subject', methods=['GET', 'POST'])
 @require_login
 def add_subject():
+    token = request.cookies.get('token')
+    current_user = User.find_by_token(token)
     if request.method == 'GET':
-        return render_template('add_subject.html')
+        return render_template('add_subject.html', current_user=current_user)
     else:
         name = request.form.get('name')
         token = request.cookies.get('token')
@@ -231,8 +233,10 @@ def add_subject():
 @require_login
 def edit_subject(subject_id):
     if request.method == 'GET':
+        token = request.cookies.get('token')
+        current_user = User.find_by_token(token)
         subject= Subject.query.get(subject_id)
-        return render_template('edit_subject.html', subject_id=subject_id, subject=subject)
+        return render_template('edit_subject.html', subject_id=subject_id, subject=subject, current_user=current_user)
     else:
         name = request.form.get('name')
         description = request.form.get('message')
@@ -273,13 +277,15 @@ def posts(subject_id):
     current_user = User.find_by_token(token)
     all = Post.query.filter_by(subject_id=subject_id, user_id = current_user.id)
     posts = list(all)
-    return render_template('my_posts.html', subject_id=subject_id, subject=subject, posts=posts)
+    return render_template('my_posts.html', subject_id=subject_id, subject=subject, posts=posts, current_user=current_user)
 
 @app.route('/my_subjects/<subject_id>/my_posts/add_post', methods=['GET', 'POST'])
 @require_login
 def add_post(subject_id):
     if request.method == 'GET':
-        return render_template('add_post.html', subject_id=subject_id)
+        token = request.cookies.get('token')
+        current_user = User.find_by_token(token)
+        return render_template('add_post.html', subject_id=subject_id, current_user=current_user)
     else:
         name = request.form.get("name")
         subject_id = subject_id
@@ -323,19 +329,23 @@ def add_post_2(subject_id):
 @app.route('/my_subjects/<subject_id>/my_posts/<post_id>', methods=['GET'])
 @require_login
 def post(subject_id, post_id):
+    token = request.cookies.get('token')
+    current_user = User.find_by_token(token)
     subject = Subject.query.get(subject_id)
     post = Post.query.get(post_id)
     return render_template("post.html", subject_id=subject_id, post_id=post_id,
-    subject=subject, post=post)
+    subject=subject, post=post, current_user=current_user)
 
 @app.route('/my_subjects/<subject_id>/my_posts/<post_id>/edit_post', methods=['GET', 'POST'])
 @require_login
 def edit_post(subject_id, post_id):
     if request.method == 'GET':
+        token = request.cookies.get('token')
+        current_user = User.find_by_token(token)
         subject = Subject.query.get(subject_id)
         post = Post.query.get(post_id)
         return render_template('edit_post.html', subject_id=subject_id, post_id=post_id,
-        subject=subject, post=post)
+        subject=subject, post=post, current_user=current_user)
     else:
         name = request.form.get('name')
 
@@ -350,7 +360,7 @@ def edit_post(subject_id, post_id):
 
 @app.route('/my_subjects/<subject_id>/my_posts/<post_id>/delete_post', methods=['GET'])
 @require_login
-def delete_post(subject_id, post_id):
+def delete_post(post_id):
     try:
         post = Post.query.get(post_id)
         """messages = Message.query.get(post_id=post_id)

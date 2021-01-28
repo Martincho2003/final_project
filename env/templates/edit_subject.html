@@ -19,7 +19,9 @@
 <body>
   <div align='Center'>
     <h1 style="margin-top:25px">Edit subject {{subject.name}}</h1>
-
+    {% if current_user %}
+        <h3>{{current_user.username}}</h3>
+    {% endif %}
     <form method="POST" url="/add_subject" enctype=multipart/form-data>
       <label name="name">New name:</label>
       <input type="text" name="name" autofocus />
@@ -27,7 +29,6 @@
       <br>
       <label name="description">New description:</label>
       <textarea name="message" rows="10" cols="30"></textarea>
-      <!--TODO: make the input for description bigger!-->
       <br>
       <br>
       <button type="submit">Edit</button>

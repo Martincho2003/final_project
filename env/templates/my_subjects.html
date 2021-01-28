@@ -18,6 +18,9 @@
 
 <body>
   <h1 style="margin-top:25px">My subjects</h1>
+  {% if current_user %}
+    <h3>{{current_user.username}}</h3>
+  {% endif %}
   <ul>
     <li><a href="/my_subjects/add_subject">Add new subject</a></li>
   </ul>

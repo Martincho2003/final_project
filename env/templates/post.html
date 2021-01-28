@@ -8,7 +8,10 @@
 
 <body>
     <h1 style="margin-top:25px">My post</h1>
-    <h3>{{post.name}}</h3>
+    {% if current_user %}
+        <h3>{{current_user.username}}</h3>
+    {% endif %}
+    <h4>{{post.name}}</h4>
     <ul>
        <li><a href='/my_subjects/{{subject_id}}/my_posts/{{post.id}}/edit_post'>Edit post</a></li>
        <li><a href='/my_subjects/{{subject_id}}/my_posts/{{post.id}}/delete_post'>Delete post</a></li>
