@@ -24,38 +24,33 @@
 <body>
     {% if current_user %}
     <h1 style="margin-top:25px">My subject</h1>
-    {% if current_user %}
+        {% if current_user %}
         <h3>{{current_user.username}}</h3>
-    {% endif %}
+        {% endif %}
     <h4>{{subject.name}}</h4>
     <ul>
        <li><a href="/">Home</a></li>
        <li><a href='/my_subjects/{{subject_id}}/edit_subject'>Edit subject</a></li>
        <li><a href='/my_subjects/{{subject_id}}/delete_subject'>Delete subject</a></li>
        <li><a href='/my_subjects/{{subject_id}}/my_posts'>My posts</a></li>
+    </ul>   
+    { % endif %}
+    {% else %}
+    <h4>{{subject.name}}</h4>
+    <ul>
+       <li><a href="/">Home</a></li>
     </ul>
-    <h3>All posts</h3>
+    {% endif %}
     <div>
         <p>{{subject.description}}</p>
     </div>
+    <h3>All posts</h3>
+
     {% for post in posts %}
         <div>
             <a class="ex"href='/{{subject_id}}/{{post.id}}'>{{post.name}}<br><p>{{post.timestamp}}</p></a>
         </div>
     {% endfor %}
-    {% else %}
-    <div>
-        <p>{{subject.description}}</p>
-    </div>
-    <h1 style="margin-top:25px">{{subject.name}}</h1>
-    <ul>
-        <li><a  href="/{{subject_id}}/add_post">Add new post</a></li>
-    </ul>
-    {% for post in posts %}
-        <div>
-            <a class="ex" href='/{{subject_id}}/{{post.id}}'>{{post.name}}<br><p>{{post.timestamp}}</p></a>
-        </div>
-    {% endfor %}
-    {% endif %}
+    
 </body>
 </html>
