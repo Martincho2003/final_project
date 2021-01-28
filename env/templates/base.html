@@ -43,6 +43,11 @@
     <li><a href="/register">Register</a></li>
   </ul>
   {% endif %}
+  {% for subject in subjects %}
+  <div>
+      <a href='/{{subject.id}}'>{{subject.name}}</a>
+  </div>
+  {% endfor %}
 </body>
 {% endblock %}
 

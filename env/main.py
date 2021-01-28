@@ -1,8 +1,7 @@
-from enum import unique
+from sqlalchemy import asc
 import json
 import hashlib
 from functools import wraps
-from operator import pos
 from flask import request, Flask, flash, redirect, jsonify
 from flask import render_template
 from datetime import datetime
@@ -35,10 +34,10 @@ class User(db.Model):
     posts = db.relationship('Post',
             foreign_keys='Post.user_id',
             backref='User')
-    messages = db.relationship('Message',
+    """messages = db.relationship('Message',
             foreign_keys='Message.user_id',
             backref='User'
-            )
+            )"""
 
     def __init__(self, **kwargs):
         if 'password' in kwargs:
@@ -73,30 +72,31 @@ class Subject(db.Model):
     posts = db.relationship('Post',
             foreign_keys='Post.subject_id',
             backref='Subject')
-    messages = db.relationship('Message',
+    """messages = db.relationship('Message',
             foreign_keys='Message.subject_id',
             backref='Subject'
-            )
+            )"""
     user_id = db.Column(db.Integer, db.ForeignKey(User.id))
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), unique=True, nullable=False)
-    messages = db.relationship('Message',
+    """messages = db.relationship('Message',
             foreign_keys='Message.post_id',
             backref='Post'
-            )
+            )"""
     subject_id = db.Column(db.Integer, db.ForeignKey(Subject.id))
     user_id = db.Column(db.Integer, db.ForeignKey(User.id))
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
-class Message(db.Model):
+"""class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(1000), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey(Post.id))
     user_id = db.Column(db.Integer, db.ForeignKey(User.id))
     subject_id = db.Column(db.Integer, db.ForeignKey(Subject.id))
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-
+"""
 
 db.create_all()
 def verify_token(token):
@@ -133,7 +133,9 @@ def stop_logged_users(func):
 def hello():
     token = request.cookies.get('token')
     current_user = User.find_by_token(token)
-    return render_template("base.html", current_user=current_user)
+    all = Subject.query.all()
+    subjects = list(all)
+    return render_template("base.html", current_user=current_user, subjects=subjects)
 
 @app.route('/login', methods=['GET', 'POST'])
 @stop_logged_users
@@ -183,8 +185,21 @@ def subjects():
 @app.route('/my_subjects/<subject_id>', methods=['GET'])
 @require_login
 def subject(subject_id):
-    subject= Subject.query.get(subject_id)
-    return render_template('subject.html', subject_id=subject_id, subject=subject)
+    subject = Subject.query.get(subject_id)
+    token = request.cookies.get('token')
+    current_user = User.find_by_token(token)
+    all = Post.query.filter_by(subject_id = subject_id, user_id=current_user.id)
+    posts = list(all)
+    return render_template('subject.html', subject_id=subject_id, subject=subject, posts=posts)
+
+@app.route('/<subject_id>', methods=['GET'])
+def subject2(subject_id):
+    subject = Subject.query.get(subject_id)
+    token = request.cookies.get('token')
+    current_user = User.find_by_token(token)
+    all = Post.query.filter_by(subject_id = subject_id).order_by(asc(Post.timestamp)).all()
+    posts = list(all)
+    return render_template('subject.html', subject_id=subject_id, subject=subject, current_user=current_user, posts=posts)
 
 @app.route('/my_subjects/add_subject', methods=['GET', 'POST'])
 @require_login
@@ -240,9 +255,9 @@ def delete_subject(subject_id):
         posts = Post.query.filter_by(subject_id=subject_id)
         for post in posts:
             db.session.delete(post)
-        messages = Message.query.get(subject_id=subject_id)
+        """messages = Message.query.get(subject_id=subject_id)
         for message in messages:
-            db.session.delete(message)
+            db.session.delete(message)"""
         db.session.delete(subject)
         db.session.commit()
         return redirect('/my_subjects')
@@ -285,6 +300,26 @@ def add_post(subject_id):
         flash('Error: {}'.format(e))
         return redirect(request.url)
 
+@app.route('/<subject_id>/add_post', methods=['GET', 'POST'])
+def add_post_2(subject_id):
+    if request.method == 'GET':
+        return render_template('add_post.html', subject_id=subject_id)
+    else:
+        name = request.form.get("name")
+        subject_id = subject_id
+
+    try:
+        post = Post(
+                name = name,
+                subject_id = subject_id,
+                )
+        db.session.add(post)
+        db.session.commit()
+        return redirect('/')
+    except Exception as e:
+        flash('Error: {}'.format(e))
+        return redirect(request.url)
+
 @app.route('/my_subjects/<subject_id>/my_posts/<post_id>', methods=['GET'])
 @require_login
 def post(subject_id, post_id):
@@ -318,15 +353,23 @@ def edit_post(subject_id, post_id):
 def delete_post(subject_id, post_id):
     try:
         post = Post.query.get(post_id)
-        messages = Message.query.get(post_id=post_id)
+        """messages = Message.query.get(post_id=post_id)
         for message in messages:
-            db.session.delete(message)    
+            db.session.delete(message)"""   
         db.session.delete(post)
         db.session.commit()
         return redirect('/my_subjects/<subject_id>/my_posts')
     except Exception as e:
         flash('Error: {}'.format(e))
         return redirect(request.url)
+
+#TODO:
+@app.route('/<subject_id>/<post_id>', methods=['GET', 'POST'])
+def messaging(subject_id, post_id):
+    if request.method == 'GET':
+        return render_template('messages.html', subject_id=subject_id, post_id=post_id)
+    else:
+        pass
 
 if __name__ == "__main__":
 	app.run()
