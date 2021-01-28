@@ -35,19 +35,25 @@
        <li><a href='/my_subjects/{{subject_id}}/my_posts'>My posts</a></li>
     </ul>
     <h3>All posts</h3>
+    <div>
+        <p>{{subject.description}}</p>
+    </div>
     {% for post in posts %}
         <div>
-            <a href='/{{subject_id}}/{{post.id}}'>{{post.name}}</a>
+            <a class="ex"href='/{{subject_id}}/{{post.id}}'>{{post.name}}<br><p>{{post.timestamp}}</p></a>
         </div>
     {% endfor %}
     {% else %}
+    <div>
+        <p>{{subject.description}}</p>
+    </div>
     <h1 style="margin-top:25px">{{subject.name}}</h1>
     <ul>
-        <li><a href="/{{subject_id}}/add_post">Add new post</a></li>
+        <li><a  href="/{{subject_id}}/add_post">Add new post</a></li>
     </ul>
     {% for post in posts %}
         <div>
-            <a href='/{{subject_id}}/{{post.id}}'>{{post.name}}<br><p>{{post.timestamp}}</p></a>
+            <a class="ex" href='/{{subject_id}}/{{post.id}}'>{{post.name}}<br><p>{{post.timestamp}}</p></a>
         </div>
     {% endfor %}
     {% endif %}

@@ -83,6 +83,7 @@ db.create_all()
 
 #---------------------------------------------------------------#
 # functions
+
 def verify_token(token):
     s = Serializer(app.secret_key)
     try:
