@@ -77,7 +77,6 @@ class Post(db.Model):
     subject_id = db.Column(db.Integer,db.ForeignKey(Subject.id))
     user_id = db.Column(db.Integer, db.ForeignKey(User.id))
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    sub = db.Column(db.String)
 
 db.create_all()
 
